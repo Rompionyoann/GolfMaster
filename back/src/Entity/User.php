@@ -7,9 +7,33 @@ use ApiPlatform\Metadata\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ApiResource]
+
+/**
+ * @ORM\Entity(repositoryClass=UserRepository::class)
+ * @ApiResource(
+ *  collectionOperations={
+ *     "get"={
+ *         "normalization_context"={"groups"={"user_read"}}
+ *    },
+ *    "post"
+ *    },
+ *    itemOperations={
+ *      "get"={
+ *          "normalization_context"={"groups"={"user_details_read"}}
+ *     },
+ *      "put",
+ *      "patch",
+ *      "delete"
+ *      }
+ *      )
+ */
+
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -18,7 +42,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?int $id = null;
 
 
-
+    /**
+     * @ORM\Column(type="string", length=180, unique=true)
+     * @Groups({"user_read", "user_details_read"})
+     */
     #[ORM\Column(length: 180, unique: true)]
     private ?string $email = null;
 
@@ -39,6 +66,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length: 255)]
     private ?string $Lastname = null;
+
+    /*
+    * @ORM\OneToMany(mappedBy: 'User', targetEntity: Round::class, orphanRemoval: true)
+    * @Groups({"user_details_read"});
+    */
+    private Collection $rounds;
 
     public function getId(): ?int
     {
@@ -142,6 +175,32 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setLastname(string $Lastname): static
     {
         $this->Lastname = $Lastname;
+
+        return $this;
+    }
+    /**
+     * @return Collection<int, Round>
+     */
+    public function getRounds(): Collection
+    {
+        return $this->rounds;
+    }
+
+    public function addRound(Round $round): static
+    {
+        if (!$this->rounds->contains($round)) {
+            $this->rounds->add($round);
+            $round->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRound(Round $round): static
+    {
+        if ($this->rounds->removeElement($round)) {
+            // set the owning side to null (unless already changed)
+        }
 
         return $this;
     }

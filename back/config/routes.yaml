@@ -11,6 +11,15 @@ api_login:
 api_login_check:
     path: /api/login_check
 
+app_club:
+    resource: ../src/Controller/ClubController.php
+    type: annotation
+
+rounds:
+    path: /api/rounds
+
+parcours:
+    path: /api/parcourss
 
 
 dev:

@@ -26,7 +26,7 @@ class Round
 
     #[ORM\ManyToOne(inversedBy: 'rounds')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Client $Client = null;
+    private ?User $User = null;
 
     #[ORM\OneToMany(mappedBy: 'Round', targetEntity: Counting::class, orphanRemoval: true)]
     private Collection $countings;
@@ -65,14 +65,14 @@ class Round
         return $this;
     }
 
-    public function getClient(): ?Client
+    public function getUser(): ?User
     {
-        return $this->Client;
+        return $this->User;
     }
 
-    public function setClient(?Client $Client): static
+    public function setuser(?User $User): static
     {
-        $this->Client = $Client;
+        $this->User = $User;
 
         return $this;
     }

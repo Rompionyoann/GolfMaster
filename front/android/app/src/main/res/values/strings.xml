@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">GolfMaster</string>
+    <string name="title_activity_main">GolfMaster</string>
+    <string name="package_name">com.golfmaster.app</string>
+    <string name="custom_url_scheme">com.golfmaster.app</string>
+</resources>

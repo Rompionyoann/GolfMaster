@@ -1,0 +1,8 @@
+{
+  "appId": "com.golfmaster.app",
+  "appName": "GolfMaster",
+  "webDir": "out",
+  "server": {
+    "androidScheme": "https"
+  }
+}
